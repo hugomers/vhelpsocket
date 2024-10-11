@@ -14,7 +14,7 @@ const deposits = io.of('/deposits')
 deposits.on("connection", dep => {
   console.log(`connect ${dep.id}`);
 
-  dep.on('Conexion', params => {
+  dep.on('paramscon', params => {
     
     console.log(`Conexion a sucursal ${params.session.store.alias}`)
     const room = params.session.store.id
