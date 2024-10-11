@@ -1,7 +1,8 @@
 const allowedSites = [
   'http://localhost:9000',
   'http://192.168.10.160:9000',
-
+  'http://192.168.10.189:2201',
+  'http://192.168.10.238:1975'
 ];
 
 const { Server } = require('socket.io');
@@ -26,11 +27,16 @@ io.on("connection", dep => {
       console.error('Room no está definido');
     }
     io.emit('List', formulario);
-  })
+  })                                                                                                                      
   
   dep.on('ChangeStatus', (formulario) => {
     console.log(formulario.store.id)
     dep.to(formulario.store.id).emit('ChangeStatus',formulario)
+  })
+
+  dep.on('ChangeTicket', (formulario) => {
+    console.log(formulario.store.id)
+    io.emit('ChangeTicket',formulario)
   })
 
 
