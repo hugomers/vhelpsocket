@@ -9,14 +9,18 @@ const { Server } = require('socket.io');
 
 const io = new Server({ cors: { origin: allowedSites } });
 
-io.on("connection", dep => {
+const deposits = io.of('/deposits')
+
+deposits.on("connection", dep => {
   console.log(`connect ${dep.id}`);
-  dep.on('Conexion', (params) => {
+
+  dep.on('Conexion', params => {
+    
     console.log(`Conexion a sucursal ${params.session.store.alias}`)
     const room = params.session.store.id
     dep.join(room)
     dep.room = room
-    dep.emit('Room', (room))
+    dep.emit('Room', room)
   })
 
   dep.on('Create', (formulario) => {
@@ -26,7 +30,7 @@ io.on("connection", dep => {
     } else {
       console.error('Room no está definido');
     }
-    io.emit('List', formulario);
+    deposits.emit('List', formulario);
   })                                                                                                                      
   
   dep.on('ChangeStatus', (formulario) => {
@@ -36,7 +40,7 @@ io.on("connection", dep => {
 
   dep.on('ChangeTicket', (formulario) => {
     console.log(formulario.store.id)
-    io.emit('ChangeTicket',formulario)
+    deposits.emit('ChangeTicket',formulario)
   })
 
 
